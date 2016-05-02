@@ -1,7 +1,7 @@
 <?php
 
     /**
-    * Exécuter les requêtes et traiter les données.
+    * eseguire le richieste e trattare i dati.
     */
     
     class AlloHelper
@@ -88,28 +88,28 @@
             switch((string) $lang)
             {
                 case 'de': case 'filmstarts.de':
-                    $this->APIUrl = "api.filmstarts.de";
-                    $this->imagesUrl = "bilder.filmstarts.de";
+                $this->APIUrl = "api.filmstarts.de";
+                $this->imagesUrl = "bilder.filmstarts.de";
                 break;
                 
                 case 'es': case 'sensacine.com':
-                    $this->APIUrl = "api.sensacine.com";
-                    $this->imagesUrl = "imagenes.sensacine.com";
+                $this->APIUrl = "api.sensacine.com";
+                $this->imagesUrl = "imagenes.sensacine.com";
                 break;
                 
                 case 'fr': case 'allocine.fr':
-                    $this->APIUrl = "api.allocine.fr";
-                    $this->imagesUrl = "images.allocine.fr";
+                $this->APIUrl = "api.allocine.fr";
+                $this->imagesUrl = "images.allocine.fr";
                 break;
                 
                 case 'en': case 'screenrush.co.uk':
-                    $this->APIUrl = "api.screenrush.co.uk";
-                    $this->imagesUrl = "images.screenrush.co.uk";
+                $this->APIUrl = "api.screenrush.co.uk";
+                $this->imagesUrl = "images.screenrush.co.uk";
                 break;
                 
                 case 'tr': case 'beyazperde.com':
-                    $this->APIUrl = "api.beyazperde.com";
-                    $this->imagesUrl = "tri.acimg.net";
+                $this->APIUrl = "api.beyazperde.com";
+                $this->imagesUrl = "tri.acimg.net";
                 break;
             }
         }
@@ -132,7 +132,7 @@
         
         
         /**
-         * Ajouter/modifier des préréglages.
+         * aggiungere/modificare di preset.
          * 
          * @param array|string $preset Si c'est un array alors chaque paire "clé" => "valeur" ou "clé=valeur" sera enregistrée dans les préréglages, sinon si c'est une chaîne alors c'est le nom du préréglage et $value est sa valeur.
          * @param string|array|int $value La valeur du préréglage si $preset est une chaîne de caractères.
@@ -144,14 +144,14 @@
             if (is_array($preset))
                 foreach($preset as $name => $value)
                     $this->_presets[ (string) $name ] = $value;
-            
-            elseif (is_string($preset))
-                $this->_presets[ $preset ] = $value;
-            
-            return $this;
-        }
-        
-        
+
+                elseif (is_string($preset))
+                    $this->_presets[ $preset ] = $value;
+
+                return $this;
+            }
+
+
         /**
          * Retourne les préréglages.
          * 
@@ -185,15 +185,15 @@
                     foreach($this->_presets as $psn => $ps)
                         if (!in_array($psn, $presets))
                             unset($this->_presets[$psn]);
-                else
-                    foreach($presets as $ps)
-                        unset($this->_presets[$ps]);
-            }
-            
-            return $this;
-        }
-        
-        
+                        else
+                            foreach($presets as $ps)
+                                unset($this->_presets[$ps]);
+                        }
+
+                        return $this;
+                    }
+
+
         /**
          * Informations sur la dernière requête.
          * @var array
@@ -212,37 +212,9 @@
         {
           if (!empty($this->lastRequest))
             return $this->lastRequest;
-        }
-        
-        
-        /**
-         * Retourne un URL créé à partir de différentes données.
-         * Les paramètres seront ajoutés dans l'ordre, sous leur forme "clé=valeur" ou "valeur" si il n'y a pas de clé.
-         * Si c'est un array les sous éléments seront implosés et séparés par des virgules "clé" => array("val1", "val2", "val3") deviendra "clé=val1,val2,val3"
-         * Les valeurs et les clés ne passent pas par la fonction urlencode !
-         * 
-         * @param string $type Le type de données à récupérer (exemple: "rest/v3/movie")
-         */
-        
-        protected function creatURL($type)
-        {
-            $this->set(array(
-                'format' => 'json',
-                'partner' => $this->partner,
-            ));
-            $params = $this->getPresets();
-            $params['filter'] = implode(",", $params['filter']);
-            
-            $queryURL = $this->APIUrl . '/' . $type;
-                  $searchQuery = str_replace('%2B', '+', http_build_query($params)) . '&sed=' . date('Ymd');
-                  $toEncrypt = $this->allocineSecretKey . $searchQuery;
-                  $sig = urlencode(base64_encode(sha1($toEncrypt, true)));
-                  $queryURL .= '?' . $searchQuery . '&sig=' . $sig;
-            
-                  return $queryURL;
-        }
-        
-        
+    }
+
+
         /**
          * Retourne un user-agent aléatoire.
          * @return string
@@ -254,36 +226,36 @@
             $a = rand(0, 9);
             $b = rand(0, 99);
             $c = rand(0, 999);
-          
+
             $userAgents = array(
                 "Mozilla/5.0 (Linux; U; Android $v; fr-fr; Nexus One Build/FRF91) AppleWebKit/5$b.$c (KHTML, like Gecko) Version/$a.$a Mobile Safari/5$b.$c",
                 "Mozilla/5.0 (Linux; U; Android $v; fr-fr; Dell Streak Build/Donut AppleWebKit/5$b.$c+ (KHTML, like Gecko) Version/3.$a.2 Mobile Safari/ 5$b.$c.1",
-                "Mozilla/5.0 (Linux; U; Android 4.$v; fr-fr; LG-L160L Build/IML74K) AppleWebkit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30",
-                "Mozilla/5.0 (Linux; U; Android 4.$v; fr-fr; HTC Sensation Build/IML74K) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30",
-                "Mozilla/5.0 (Linux; U; Android $v; en-gb) AppleWebKit/999+ (KHTML, like Gecko) Safari/9$b.$a",
-                "Mozilla/5.0 (Linux; U; Android $v.5; fr-fr; HTC_IncredibleS_S710e Build/GRJ$b) AppleWebKit/5$b.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/5$b.1",
-                "Mozilla/5.0 (Linux; U; Android 2.$v; fr-fr; HTC Vision Build/GRI$b) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1",
-                "Mozilla/5.0 (Linux; U; Android $v.4; fr-fr; HTC Desire Build/GRJ$b) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1",
-                "Mozilla/5.0 (Linux; U; Android 2.$v; fr-fr; T-Mobile myTouch 3G Slide Build/GRI40) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1",
-                "Mozilla/5.0 (Linux; U; Android $v.3; fr-fr; HTC_Pyramid Build/GRI40) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1",
-                "Mozilla/5.0 (Linux; U; Android 2.$v; fr-fr; HTC_Pyramid Build/GRI40) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari",
-                "Mozilla/5.0 (Linux; U; Android 2.$v; fr-fr; HTC Pyramid Build/GRI40) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/5$b.1",
-                "Mozilla/5.0 (Linux; U; Android 2.$v; fr-fr; LG-LU3000 Build/GRI40) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/5$b.1",
-                "Mozilla/5.0 (Linux; U; Android 2.$v; fr-fr; HTC_DesireS_S510e Build/GRI$a) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/$c.1",
-                "Mozilla/5.0 (Linux; U; Android 2.$v; fr-fr; HTC_DesireS_S510e Build/GRI40) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile",
-                "Mozilla/5.0 (Linux; U; Android $v.3; fr-fr; HTC Desire Build/GRI$a) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1",
-                "Mozilla/5.0 (Linux; U; Android 2.$v; fr-fr; HTC Desire Build/FRF$a) AppleWebKit/533.1 (KHTML, like Gecko) Version/$a.0 Mobile Safari/533.1",
-                "Mozilla/5.0 (Linux; U; Android $v; fr-lu; HTC Legend Build/FRF91) AppleWebKit/533.1 (KHTML, like Gecko) Version/$a.$a Mobile Safari/$c.$a",
-                "Mozilla/5.0 (Linux; U; Android $v; fr-fr; HTC_DesireHD_A9191 Build/FRF91) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1",
-                "Mozilla/5.0 (Linux; U; Android $v.1; fr-fr; HTC_DesireZ_A7$c Build/FRG83D) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/$c.$a",
-                "Mozilla/5.0 (Linux; U; Android $v.1; en-gb; HTC_DesireZ_A7272 Build/FRG83D) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/$c.1",
-                "Mozilla/5.0 (Linux; U; Android $v; fr-fr; LG-P5$b Build/FRG83) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1"
-            );
-            
-                  return $userAgents[rand(0, count($userAgents) - 1)];
-        }
-        
-        
+                    "Mozilla/5.0 (Linux; U; Android 4.$v; fr-fr; LG-L160L Build/IML74K) AppleWebkit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30",
+                    "Mozilla/5.0 (Linux; U; Android 4.$v; fr-fr; HTC Sensation Build/IML74K) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30",
+                    "Mozilla/5.0 (Linux; U; Android $v; en-gb) AppleWebKit/999+ (KHTML, like Gecko) Safari/9$b.$a",
+                    "Mozilla/5.0 (Linux; U; Android $v.5; fr-fr; HTC_IncredibleS_S710e Build/GRJ$b) AppleWebKit/5$b.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/5$b.1",
+                    "Mozilla/5.0 (Linux; U; Android 2.$v; fr-fr; HTC Vision Build/GRI$b) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1",
+                    "Mozilla/5.0 (Linux; U; Android $v.4; fr-fr; HTC Desire Build/GRJ$b) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1",
+                    "Mozilla/5.0 (Linux; U; Android 2.$v; fr-fr; T-Mobile myTouch 3G Slide Build/GRI40) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1",
+                    "Mozilla/5.0 (Linux; U; Android $v.3; fr-fr; HTC_Pyramid Build/GRI40) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1",
+                    "Mozilla/5.0 (Linux; U; Android 2.$v; fr-fr; HTC_Pyramid Build/GRI40) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari",
+                    "Mozilla/5.0 (Linux; U; Android 2.$v; fr-fr; HTC Pyramid Build/GRI40) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/5$b.1",
+                    "Mozilla/5.0 (Linux; U; Android 2.$v; fr-fr; LG-LU3000 Build/GRI40) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/5$b.1",
+                    "Mozilla/5.0 (Linux; U; Android 2.$v; fr-fr; HTC_DesireS_S510e Build/GRI$a) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/$c.1",
+                    "Mozilla/5.0 (Linux; U; Android 2.$v; fr-fr; HTC_DesireS_S510e Build/GRI40) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile",
+                    "Mozilla/5.0 (Linux; U; Android $v.3; fr-fr; HTC Desire Build/GRI$a) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1",
+                    "Mozilla/5.0 (Linux; U; Android 2.$v; fr-fr; HTC Desire Build/FRF$a) AppleWebKit/533.1 (KHTML, like Gecko) Version/$a.0 Mobile Safari/533.1",
+                    "Mozilla/5.0 (Linux; U; Android $v; fr-lu; HTC Legend Build/FRF91) AppleWebKit/533.1 (KHTML, like Gecko) Version/$a.$a Mobile Safari/$c.$a",
+                    "Mozilla/5.0 (Linux; U; Android $v; fr-fr; HTC_DesireHD_A9191 Build/FRF91) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1",
+                    "Mozilla/5.0 (Linux; U; Android $v.1; fr-fr; HTC_DesireZ_A7$c Build/FRG83D) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/$c.$a",
+                    "Mozilla/5.0 (Linux; U; Android $v.1; en-gb; HTC_DesireZ_A7272 Build/FRG83D) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/$c.1",
+                    "Mozilla/5.0 (Linux; U; Android $v; fr-fr; LG-P5$b Build/FRG83) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1"
+                    );
+
+return $userAgents[rand(0, count($userAgents) - 1)];
+}
+
+
         /**
           * Retourne le gestionnaire cURL qui sera utilisé pour la prochaine requête.
           * 
@@ -307,115 +279,6 @@
         }
         
         
-        /**
-         * Récupérer des données JSON et les convertir depuis un URL grâce à php_curl, ou à défaut file_get_contents().
-         * 
-         * @param string $url L'URL vers lequel aller chercher les données JSON.
-         * @return array|false Un array contenant les données en cas de succès, false si une erreur est survenue.
-         * @throws ErrorException
-         */
-        
-        protected function getDataFromURL($url)
-        {
-            if (!function_exists('json_decode'))
-            {
-                $this->error("The extension php_json must be installed with PHP and enabled.", 8);
-                return false;
-            }
-            
-            if (function_exists("curl_init"))
-            {
-                $curl = ($this->_cURL == null) ? curl_init() : $this->_cURL;
-                        $userAgent = self::getRandomUserAgent();
-                        $ip = rand(0, 255).'.'.rand(0, 255).'.'.rand(0, 255).'.'.rand(0, 255);
-                        
-                curl_setopt ($curl, CURLOPT_URL, $url);
-                curl_setopt ($curl, CURLOPT_CONNECTTIMEOUT, 10);
-                curl_setopt ($curl, CURLOPT_RETURNTRANSFER, true);
-                        curl_setopt ($curl, CURLOPT_USERAGENT, $userAgent);
-                        
-                        $headers[] = "REMOTE_ADDR: $ip";
-                        $headers[] = "HTTP_X_FORWARDED_FOR: $ip";
-                        
-                        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-                        
-                        $data = curl_exec($curl);
-                        $curlError = curl_error($curl);
-                curl_close($curl);
-                
-                $this->lastRequest = array(
-                  'userAgent' => $userAgent,
-                  'URL' => $url,
-                  'IP' => $ip,
-                  'presets' => $this->getPresets(),
-                  'rawData' => $data
-                );
-            }
-            
-            else
-            {
-                $this->error("The extension php_curl must be installed with PHP and enabled.", 1);
-                return false;
-            }
-            
-            if (empty($data))
-            {
-                $this->error("An cURL error occurred while retrieving the data: $curlError." , 2);
-                return false;
-            }
-            
-            $data = @json_decode($data, true);
-            
-            if (empty($data) or !is_array($data) or json_last_error())
-            {
-                $this->error("An JSON error (" . json_last_error() . ") occurred when converting data: " . json_last_error_msg(), 3);
-                return false;
-            }
-            else return $data;
-        }
-        
-        
-        /*
-         * Méthodes de récupération des données
-         */
-        
-        /**
-         * Récupérer les données pour un type de données et un élément du tableau retourné donné.
-         * Utilisé en interne pour diminuer et clarifier le code dans les méthodes ne nécessitant pas de traitement particulier sur leurs données.
-         * 
-         * @param string $type Voir AlloHelper::creatURL()
-         * @param string $container L'élément contenant les données dans le tableau retourné par Allociné
-         * @return AlloData|array|false
-         * @throws ErrorException
-         */
-        
-        protected function getData($type, $container, &$url)
-        {
-            // Récupération des données
-            $data = $this->getDataFromURL($url = $this->creatURL($type));
-            
-            // En cas d'erreur
-            if (empty($data))
-                return false;
-                
-            // Succès ($data est encore un array)
-            else
-            {
-                if (empty($data['error']))
-                    // On retourne les données
-                    if (class_exists('AlloData'))
-                        return new AlloData($data[$container], $this->utf8Decode);
-                    else
-                        return $data;
-                
-                // En cas d'erreur signalée par Allociné
-                else
-                {
-                    $this->error($data['error']['$'], 5);
-                    return false;
-                }
-            }
-        }
         
         /**
          * Effectuer une recherche sur Allociné.
@@ -434,7 +297,7 @@
         
         public function search($q, $page = 1, $count = 10, $sortMovies = false, array $filter = array(), &$url = null)
         {
-            
+
             // Traitement de la chaîne de recherche
             if (!is_string($q) || strlen($q) < 2)
             {
@@ -452,7 +315,7 @@
                 'filter' => (array) $filter,
                 'count' => (int) $count,
                 'page' => (int) $page
-           ));
+                ));
             
             // Création de l'URL
             $url = $this->creatURL('rest/v3/search');
@@ -577,7 +440,7 @@
                 'type' => (string) $type,
                 'count' => (int) $count,
                 'page' => (int) $page
-           ));
+                ));
             
             // Récupération et revoi des données
             return $this->getData('rest/v3/reviewlist', 'feed', $url);
@@ -585,7 +448,7 @@
         
         
         /**
-         * Récupérer une liste de films en fonction de différents paramètres.
+         * recuperare una lista di film in funzione di diversi parametri.
          * 
          * @param string $filter='nowshowing' Le type de résultats à afficher: 'nowshowing' (films au cinéma) ou 'comingsoon' (bientôt au cinéma);
          * @param string $order='dateasc' L'ordre dans lequel afficher les données: 'dateasc' (chronologique), 'datedesc' (anti-chronologique), 'theatercount' (nombre de salles) ou 'toprank' (popularité).
@@ -604,7 +467,7 @@
                 'order' => (array) $order,
                 'count' => (int) $count,
                 'page' => (int) $page
-           ));
+                ));
             
             // Récupération et revoi des données
             return $this->getData('rest/v3/movielist', 'feed', $url);
@@ -694,7 +557,7 @@
         
         public function showtimesByTheaters($theaters, $date=null, $movieCode=null, $count = 10, $page = 1, &$url = null)
         {
-            // Préréglages
+            // presets
             $this->set('theaters', (array) $theaters);
             $this->set('count', (int) $count);
             $this->set('page', (int) $page);
@@ -738,10 +601,12 @@
             $this->set(array(
                 'code' => (int) $code,
                 'profile' => (string) $profile,
-           ));
+                ));
             
             // Création de l'URL
             $url = $this->creatURL('rest/v3/movie');
+
+            echo "url $url \n";
             
             // Envoi de la requête
             $data = $this->getDataFromURL($url);
@@ -749,7 +614,7 @@
             // En cas d'erreur
             if (empty($data))
                 return false;
-                
+
             // Succès ($data est encore un array)
             else
             {
@@ -770,10 +635,149 @@
                     // Correction des apostrophes dans le synopsis si nécessaire
                     if ($this->autoCorrectApostrophe and !empty($data['synopsis']))
                       $data['synopsis'] = preg_replace("#\p{L}\K[‘’](?=\p{L})#u", "'", $data['synopsis']);
-                    
-                    if ($this->autoCorrectApostrophe and !empty($data['synopsisShort']))
+
+                  if ($this->autoCorrectApostrophe and !empty($data['synopsisShort']))
                       $data['synopsisShort'] = preg_replace("#\p{L}\K[‘’](?=\p{L})#u", "'", $data['synopsisShort']);
+
+                    // On retourne les données
+                  if (class_exists('AlloData'))
+                    return new AlloData($data, $this->utf8Decode);
+                else
+                    return $data;
+            }
+
+                // En cas d'erreur signalée par Allociné
+            else
+            {
+                $this->error($data['error']['$'], 5);
+                return false;
+            }
+        }
+    }
+
+
+        /**
+        * -------------------------------------------------------------------------------
+        *
+        * Inizio Blocco LTEU 
+        *
+        * -------------------------------------------------------------------------------
+        */
+
+
+        /**
+         * Récupérer une liste de cinémas et la liste des films qui y passent actuellement en fonction d'un ou de plusieurs identifiant(s) de cinéma(s);
+         * 
+         * @param array|string $theaters Un identifiant/une liste d'identifiants de cinéma(s).
+         * @param $date=null Spécifier une date pour les horaires.
+         * @param $movieCode=null Spécifier les horaires d'un film (par identifiant).
+         * @param int $count=10 Le nombre maximum de résultats par page.
+         * @param int $page=1 La page des résultats.
+         * @param &$url Contiendra l'URL utilisé.
+         * 
+         * @return AlloData|array|false
+         */
+        
+        public function showtimesByCinemas($theaters)
+        {
+            // presets
+            // $this->set('count', 10); # seems useless
+
+            $this->set(array(
+                'format' => 'json',
+                'partner' => $this->partner,
+                ));
+            $params = $this->getPresets();
+            $queryURL = $this->APIUrl . '/' . 'rest/v3/showtimelist';
+            $searchQuery = str_replace('%2B', '+', http_build_query($params)) . '&sed=' . date('Ymd');
+
+
+            $today = date('Y-m-d');
+            $laterday = date('Y-m-d',strtotime('+5 days'));
+
+
+            $searchQuery .= "&theaters=$theaters&dateStart=$today&dateEnd=$laterday";
+            // $searchQuery .= "&theaters=$theaters&date=$today";
+
+            // encryption
+            $toEncrypt = $this->allocineSecretKey . $searchQuery;
+            $sig = urlencode(base64_encode(sha1($toEncrypt, true)));
+            $queryURL .= '?' . $searchQuery . '&sig=' . $sig;
+
+            $url =  $queryURL;
+            $data = $this->getDataFromURL($url);
+            
+            // In caso d'errore
+            if (empty($data) || !empty($data['error'])){
+
+                $this->error($data['error']['$'], 5);
+                return false;
+            }
+
+            return $data;
+
+        }
+        
+
+
+        /**
+         * Recupera informazioni importanti riguardo un film
+         * 
+         * @param int $code L'identificatore del film.
+         * @param int $profile='medium' La quantité d'informations à renvoyer: 'small', 'medium', 'large', 1 pour 'small', 2 pour 'medium', 3 pour 'large'.
+         * @param &$url Contiendra l'URL utilizzato.
+         * 
+         * @return AlloData|array|false
+         * @throws ErrorException
+         */
+        
+        public function movieInfo($code, $profile = 'medium', &$url = null)
+        {
+
+            // Profile (quantita d'informazioni)
+            switch($profile)
+            {
+                case 'small': break;
+                case 'large': break;
+                default: $profile = 'medium'; break;
+                
+                case 1: $profile = 'small'; break;
+                case 3: $profile = 'large';
+            }
+            
+            // Préréglages
+            $this->set(array(
+                'code' => (int) $code,
+                'profile' => (string) $profile,
+                ));
+            
+            // Creazione dell'URL
+            $url = $this->creatURL('rest/v3/movie');
+            
+            // Envoi de la requête
+            $data = $this->getDataFromURL($url);
+            
+            // En cas d'erreur
+            if (empty($data))
+                return false;
+
+            // Succès ($data est encore un array)
+            else
+            {
+                if (empty($data['error']))
+                {
+                    $data = $data['movie'];
                     
+                    // Remplacer "title" par "originalTitle" (si il n'existe pas)
+                    if (empty($data['title']))
+                        $data['title'] = $data['originalTitle'];
+
+                    $data['genere'] = $data['genre'][0]['$'];
+                    $data['runtime'] = $data['runtime'];
+                    $data['releaseDate'] = $data['release']['releaseDate'];
+                    $data['nationality'] = $data['nationality'][0]['$'];
+
+
                     // On retourne les données
                     if (class_exists('AlloData'))
                         return new AlloData($data, $this->utf8Decode);
@@ -789,6 +793,165 @@
                 }
             }
         }
+
+
+        /**
+         * retorna un URL creato a partire da diversi dati.
+         * Les paramètres seront ajoutés dans l'ordre, sous leur forme "clé=valeur" ou "valeur" si il n'y a pas de clé.
+         * Si c'est un array les sous éléments seront implosés et séparés par des virgules "clé" => array("val1", "val2", "val3") deviendra "clé=val1,val2,val3"
+         * Les valeurs et les clés ne passent pas par la fonction urlencode !
+         * 
+         * @param string $type il topo di dati da recuperare (exemple: "rest/v3/movie")
+         */
+        
+        protected function creatURL($type)
+        {
+            $this->set(array(
+                'format' => 'json',
+                'partner' => $this->partner,
+                ));
+            $params = $this->getPresets();
+            if ($params['filter'] != "") {
+                $params['filter'] = implode(",", $params['filter']);
+            }
+            $queryURL = $this->APIUrl . '/' . $type;
+            $searchQuery = str_replace('%2B', '+', http_build_query($params)) . '&sed=' . date('Ymd');
+
+          // $searchQuery .= "&theaters=C0158,B0242&dateStart=2016-05-03&dateEnd=2016-05-05";
+                   // $searchQuery .= "&theaters=C0158,B0242";
+
+          // var_dump(http_build_query($params));
+// echo "$searchQuery\n";
+            $toEncrypt = $this->allocineSecretKey . $searchQuery;
+            $sig = urlencode(base64_encode(sha1($toEncrypt, true)));
+            $queryURL .= '?' . $searchQuery . '&sig=' . $sig;
+            
+// echo "$queryURL \n";
+// die();
+            return $queryURL;
+        }
+        
+        
+
+        /**
+         * Récupérer des données JSON et les convertir depuis un URL grâce à php_curl, ou à défaut file_get_contents().
+         * 
+         * @param string $url L'URL vers lequel aller chercher les données JSON.
+         * @return array|false Un array contenant les données en cas de succès, false si une erreur est survenue.
+         * @throws ErrorException
+         */
+        
+        protected function getDataFromURL($url)
+        {
+            if (!function_exists('json_decode'))
+            {
+                $this->error("The extension php_json must be installed with PHP and enabled.", 8);
+                return false;
+            }
+            
+            if (function_exists("curl_init"))
+            {
+                $curl = ($this->_cURL == null) ? curl_init() : $this->_cURL;
+                $userAgent = self::getRandomUserAgent();
+                $ip = rand(0, 255).'.'.rand(0, 255).'.'.rand(0, 255).'.'.rand(0, 255);
+
+                curl_setopt ($curl, CURLOPT_URL, $url);
+                curl_setopt ($curl, CURLOPT_CONNECTTIMEOUT, 10);
+                curl_setopt ($curl, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt ($curl, CURLOPT_USERAGENT, $userAgent);
+
+                $headers[] = "REMOTE_ADDR: $ip";
+                $headers[] = "HTTP_X_FORWARDED_FOR: $ip";
+
+                curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+
+                $data = curl_exec($curl);
+                $curlError = curl_error($curl);
+                curl_close($curl);
+                
+                $this->lastRequest = array(
+                  'userAgent' => $userAgent,
+                  'URL' => $url,
+                  'IP' => $ip,
+                  'presets' => $this->getPresets(),
+                  'rawData' => $data
+                  );
+            }
+            
+            else
+            {
+                $this->error("The extension php_curl must be installed with PHP and enabled.", 1);
+                return false;
+            }
+            
+            if (empty($data))
+            {
+                $this->error("An cURL error occurred while retrieving the data: $curlError." , 2);
+                return false;
+            }
+            
+            $data = @json_decode($data, true);
+            
+            if (empty($data) or !is_array($data) or json_last_error())
+            {
+                $this->error("An JSON error (" . json_last_error() . ") occurred when converting data: " . json_last_error_msg(), 3);
+                return false;
+            }
+            else return $data;
+        }
+
+
+        
+        /*
+         * Méthodes de récupération des données
+         */
+        
+        /**
+         * Récupérer les données pour un type de données et un élément du tableau retourné donné.
+         * Utilisé en interne pour diminuer et clarifier le code dans les méthodes ne nécessitant pas de traitement particulier sur leurs données.
+         * 
+         * @param string $type Voir AlloHelper::creatURL()
+         * @param string $container L'élément contenant les données dans le tableau retourné par Allociné
+         * @return AlloData|array|false
+         * @throws ErrorException
+         */
+        
+        protected function getData($type, $container, &$url)
+        {
+            // Récupération des données
+            $data = $this->getDataFromURL($url = $this->creatURL($type));
+            
+            // En cas d'erreur
+            if (empty($data))
+                return false;
+
+            // Succès ($data est encore un array)
+            else
+            {
+                if (empty($data['error']))
+                    // On retourne les données
+                    if (class_exists('AlloData'))
+                        return new AlloData($data[$container], $this->utf8Decode);
+                    else
+                        return $data;
+
+                // En cas d'erreur signalée par Allociné
+                    else
+                    {
+                        $this->error($data['error']['$'], 5);
+                        return false;
+                    }
+                }
+            }
+
+
+        /**
+        * -------------------------------------------------------------------------------
+        *
+        * Fine Blocco LTEU 
+        *
+        * -------------------------------------------------------------------------------
+        */
         
         
         /**
@@ -818,7 +981,7 @@
             $this->set(array(
                 'code' => (int) $code,
                 'profile' => (string) $profile,
-           ));
+                ));
             
             // Récupération et revoi des données
             return $this->getData('rest/v3/news', 'news', $url);
@@ -852,7 +1015,7 @@
             $this->set(array(
                 'code' => (int) $code,
                 'profile' => (string) $profile,
-           ));
+                ));
             
             // Récupération et revoi des données
             return $this->getData('rest/v3/person', 'person', $url);
@@ -886,7 +1049,7 @@
             $this->set(array(
                 'code' => (int) $code,
                 'profile' => (string) $profile,
-           ));
+                ));
             
             // Récupération et revoi des données
             return $this->getData('rest/v3/media', 'media', $url);
@@ -920,7 +1083,7 @@
             $this->set(array(
                 'code' => (int) $code,
                 'profile' => (string) $profile,
-           ));
+                ));
             
             // Récupération et revoi des données
             return $this->getData('rest/v3/filmography', 'person', $url);
@@ -954,7 +1117,7 @@
             $this->set(array(
                 'code' => (int) $code,
                 'profile' => (string) $profile,
-           ));
+                ));
             
             // Récupération et revoi des données
             return $this->getData('rest/v3/tvseries', 'tvseries', $url);
@@ -988,7 +1151,7 @@
             $this->set(array(
                 'code' => (int) $code,
                 'profile' => (string) $profile,
-           ));
+                ));
             
             // Récupération et revoi des données
             return $this->getData('rest/v3/season', 'season', $url);
@@ -1022,7 +1185,7 @@
             $this->set(array(
                 'code' => (int) $code,
                 'profile' => (string) $profile,
-           ));
+                ));
             
             // Récupération et revoi des données
             return $this->getData('rest/v3/episode', 'episode', $url);

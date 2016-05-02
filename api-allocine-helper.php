@@ -23,6 +23,12 @@
     * @author Etienne Gauvin <etienne@gauvin.info>
     * @version 2.3
     */
+
+    ###################################################################
+    ## Time zone  ##
+    ###################################################################  
+
+    date_default_timezone_set("Europe/Rome");
     
     ###################################################################
     ## Modifier les constantes ci-dessous en fonction de vos besoins ##

@@ -1,24 +1,22 @@
 API Allociné Helper PHP
 =======================
 
-[English version](#english)
+[Italian version](#Italian)
 
-L'API Allociné Helper permet d'utiliser plus simplement l'API d'[AlloCiné](http://www.allocine.fr/).
-La classe **AlloHelper** permet de trouver des informations sur les films, stars, articles, horaires et critiques.
-Il est possible de manipuler les données reçues grâce à la classe **AlloData** (optionnel).
-La classe **AlloImage** permet de manipuler facilement la taille des posters et images stockés sur Allociné.
+L'API Allociné Helper permette d'utilizzare il più semplice l'API d'[AlloCiné](http://www.allocine.fr/).
+La classe **AlloHelper** permette di trovare le informazioni su  film, stars, articoli, orari e critiche.
+È possibile manipolare i dati recuperati dalla classe **AlloData** (opzionale).
+La classe **AlloImage** permette di manipolare facilmente  de manipuler facilement la dimensione dei  poster e immagini memorizzati nel Allociné.
 
-### Installation
+### Installazione
 
-Déplacer le fichier `api-allocine-helper.php` dans le répertoire souhaité.
-Un simple `require_once "./api-allocine-helper.php";` permet d'utiliser l'API dans votre code.
+`require_once "./api-allocine-helper.php";`
 
-### Usage
+### Utilizzo
 
-L'utilisation est très simple, néanmoins il est fortement conseillé de connaître la programmation orientée objet, et de savoir utiliser le bloc `try{} catch(){}`.
-Exemple d'utilisation pour récupérer les informations d'un film:
+L'utilizzazione è molto semplice, tuttivia, si consiglia foremente di usare la programmazione orientata ad oggetti e sapere usare i blocchi `try{} catch(){}`.
 
-Premièrement, inclure le fichier et créer un objet `AlloHelper`:
+Un esempio per recuperare informazioni di un film
 
 ```
 <?php
@@ -43,19 +41,19 @@ Ensuite, il est conseillé d'effectuer des requêtes dans un bloc `try{} catch()
 ```
     try
     {
-        // Envoi de la requête
+        // invocare la richiesta
         $movie = $helper->movie( $code, $profile );
         
-        // Afficher le titre
+        // mostra il titolo
         echo "Titre du film: ", $movie->title, PHP_EOL;
         
-        // Afficher toutes les données
+        // mostra tutti i dati
         print_r($movie->getArray());
         
     }
     catch( ErrorException $error )
     {
-        // En cas d'erreur
+        // In caso di errore
         echo "Erreur n°", $error->getCode(), ": ", $error->getMessage(), PHP_EOL;
     }
 ?>
