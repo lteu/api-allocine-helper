@@ -62,7 +62,7 @@ Next, it's advisable to do requests in an `try{} catch(){}` block for handling e
 ?>
 ```
 
-List showtimes for a givin cinema, run
+List showtimes for a given cinema, run
 ```
 $ php console-cinema.php
 ```

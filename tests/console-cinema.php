@@ -2,10 +2,10 @@
 
 /**
 *
-* Demo: list movie show time of givin cinemas
+* Demo: list movie show time of given cinemas
 *
 */
-    require_once "../api-allocine-helper.php";
+    require_once dirname(__FILE__)."/../api-allocine-helper.php";
     
     // Construct the object
     $allohelper = new AlloHelper;
@@ -34,7 +34,18 @@
                 $idfilm = $movie['onShow']['movie']['code'];
                 $title = $movie['onShow']['movie']['title'];
                 $runtime = $movie['onShow']['movie']['runtime'];
-                $type = $movie['onShow']['movie']['genre']['0']['$'];
+                
+                //one type
+                $oneType = $movie['onShow']['movie']['genre']['0']['$'];
+
+                //all types
+                $allTypes = "";
+                foreach ($movie['onShow']['movie']['genre'] as $typeidx => $type) {
+                    $allTypes .= $type['$'].",";
+                }
+
+                $allTypes = rtrim($allTypes,",");
+
                 $ratingPeople = $movie['onShow']['movie']['statistics']['pressRating'];
                 $ratingPeople = $movie['onShow']['movie']['statistics']['userRating'];
                 $releaseDate = $movie['onShow']['movie']['release']['releaseDate'];
@@ -51,7 +62,7 @@
                         echo "$idCinema, $idfilm, $title, $day, $start \n";
 
                         //more
-                        echo "$idCinema, $title, $type, $runtime, $releaseDate, $ratingPeople, $ratingPeople \n";
+                        echo "$idCinema, $title, $allTypes, $runtime, $releaseDate, $ratingPeople, $ratingPeople \n";
                     }
                 }
 
