@@ -15,26 +15,15 @@
 
         // $cinemas = "B0242,C0158";
         $cinemas = "C0150";
-        // echo "$cinemas";
-        // die();
-        $films = $allohelper->showtimesByCinemas($cinemas);
-        // var_dump($films);
 
-        $json = $films;
+        $json = $allohelper->showtimesByCinemas($cinemas);
+        // var_dump($json);
 
-        // $jsonstr = json_encode($films);
+        // $jsonstr = json_encode($json);
         // echo "$jsonstr";
 
         // $string = file_get_contents("jso.json");
         // $json = json_decode($string, true);
-
-
-        // var_dump($json["feed"]["theaterShowtimes"][0]['movieShowtimes'][0]['onShow']['movie']['title']);
-        // var_dump($json["feed"]["theaterShowtimes"][0]['movieShowtimes'][0]['onShow']['movie']['runtime']);
-        // var_dump($json["feed"]["theaterShowtimes"][0]['movieShowtimes'][0]['onShow']['movie']['genre'][0]['$']);
-        // var_dump($json["feed"]["theaterShowtimes"][0]['movieShowtimes'][0]['onShow']['movie']['statistics']['pressRating']);
-        // var_dump($json["feed"]["theaterShowtimes"][0]['movieShowtimes'][0]['scr'][0]['d']);
-        // var_dump($json["feed"]["theaterShowtimes"][0]['movieShowtimes'][0]['scr'][0]['t'][0]['$']);
 
 
         $theaterShowtimes = $json["feed"]["theaterShowtimes"];
@@ -69,6 +58,14 @@
                 
             }
         }
+
+
+        // var_dump($json["feed"]["theaterShowtimes"][0]['movieShowtimes'][0]['onShow']['movie']['title']);
+        // var_dump($json["feed"]["theaterShowtimes"][0]['movieShowtimes'][0]['onShow']['movie']['runtime']);
+        // var_dump($json["feed"]["theaterShowtimes"][0]['movieShowtimes'][0]['onShow']['movie']['genre'][0]['$']);
+        // var_dump($json["feed"]["theaterShowtimes"][0]['movieShowtimes'][0]['onShow']['movie']['statistics']['pressRating']);
+        // var_dump($json["feed"]["theaterShowtimes"][0]['movieShowtimes'][0]['scr'][0]['d']);
+        // var_dump($json["feed"]["theaterShowtimes"][0]['movieShowtimes'][0]['scr'][0]['t'][0]['$']);
     }
     // Error
     catch (ErrorException $e)

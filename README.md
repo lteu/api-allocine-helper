@@ -1,64 +1,6 @@
 API Allociné Helper PHP
 =======================
 
-[Italian version](#Italian)
-
-L'API Allociné Helper permette d'utilizzare il più semplice l'API d'[AlloCiné](http://www.allocine.fr/).
-La classe **AlloHelper** permette di trovare le informazioni su  film, stars, articoli, orari e critiche.
-È possibile manipolare i dati recuperati dalla classe **AlloData** (opzionale).
-La classe **AlloImage** permette di manipolare facilmente  de manipuler facilement la dimensione dei  poster e immagini memorizzati nel Allociné.
-
-### Installazione
-
-`require_once "./api-allocine-helper.php";`
-
-### Utilizzo
-
-L'utilizzazione è molto semplice, tuttivia, si consiglia foremente di usare la programmazione orientata ad oggetti e sapere usare i blocchi `try{} catch(){}`.
-
-Un esempio per recuperare informazioni di un film
-
-```
-<?php
-    // Inclure le script
-    require_once "./api-allocine-helper.php";
-    
-    // Créer l'objet
-    $helper = new AlloHelper;
-    
-```
-
-Pour plus de clareté, on définit les paramètres à l'avance: le code du film, et la quantité d'informations à récupérer.
-
-```
-    $code = 27061;
-    $profile = 'small';
-    
-```
-
-Ensuite, il est conseillé d'effectuer des requêtes dans un bloc `try{} catch(){}` pour gérer les erreurs.
-
-```
-    try
-    {
-        // invocare la richiesta
-        $movie = $helper->movie( $code, $profile );
-        
-        // mostra il titolo
-        echo "Titre du film: ", $movie->title, PHP_EOL;
-        
-        // mostra tutti i dati
-        print_r($movie->getArray());
-        
-    }
-    catch( ErrorException $error )
-    {
-        // In caso di errore
-        echo "Erreur n°", $error->getCode(), ": ", $error->getMessage(), PHP_EOL;
-    }
-?>
-```
-
 
 English
 -------
@@ -119,4 +61,75 @@ Next, it's advisable to do requests in an `try{} catch(){}` block for handling e
     }
 ?>
 ```
+
+List showtimes for a givin cinema, run
+```
+$ php console-cinema.php
+```
+
+Italiano
+-------
+
+L'API Allociné Helper permette d'utilizzare il più semplice l'API d'[AlloCiné](http://www.allocine.fr/).
+La classe **AlloHelper** permette di trovare le informazioni su  film, stars, articoli, orari e critiche.
+È possibile manipolare i dati recuperati dalla classe **AlloData** (opzionale).
+La classe **AlloImage** permette di manipolare facilmente la dimensione dei  poster e immagini su Allociné.
+
+### Installazione
+
+`require_once "./api-allocine-helper.php";`
+
+### Utilizzo
+
+L'utilizzazione è molto semplice, tuttivia, si consiglia foremente di usare la programmazione orientata ad oggetti e sapere usare i blocchi `try{} catch(){}`.
+
+Un esempio per recuperare informazioni di un film
+
+```
+<?php
+    // inlcludere la liberia
+    require_once "./api-allocine-helper.php";
+    
+    // Creare l'oggetto
+    $helper = new AlloHelper;
+    
+```
+
+Per chiarezza, si definisce il parametro in anticipo: p.e. il codice del film e la quantità di informazioni da recuperare.
+
+```
+    $code = 27061;
+    $profile = 'small';
+    
+```
+
+Poi, si consiglia di effettuare la richiesta dentro blocco `try{} catch(){}` per gestire gli errori.
+
+```
+    try
+    {
+        // invocare la richiesta
+        $movie = $helper->movie( $code, $profile );
+        
+        // mostra il titolo
+        echo "Titre du film: ", $movie->title, PHP_EOL;
+        
+        // mostra tutti i dati
+        print_r($movie->getArray());
+        
+    }
+    catch( ErrorException $error )
+    {
+        // In caso di errore
+        echo "Erreur n°", $error->getCode(), ": ", $error->getMessage(), PHP_EOL;
+    }
+?>
+```
+
+Mostrare showtimes per un dato cinema, si esegue il seguente:
+```
+$ php console-cinema.php
+```
+
+
 
